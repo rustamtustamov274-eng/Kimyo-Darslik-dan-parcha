@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kimyo - Interaktiv Kimyo Platformasi</title>
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #34a853;
+            --accent: #ea4335;
+            --dark: #1a1a2e;
+            --darker: #0f0f1e;
+            --light: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #202124;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .lang-selector {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.3"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .creators {
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .creators h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* 3D Molecule Animation */
+        .molecule-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .molecule-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .molecule-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .molecule-3d {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 1rem;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .atom {
+            position: absolute;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            animation: rotate 4s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotateY(0deg) rotateX(0deg); }
+            100% { transform: rotateY(360deg) rotateX(360deg); }
+        }
+
+        .bond {
+            position: absolute;
+            background: linear-gradient(90deg, #888, #ccc, #888);
+            height: 4px;
+            transform-origin: left center;
+        }
+
+        /* Facts Section */
+        .facts-section {
+            padding: 4rem 2rem;
+            background: var(--light);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .fact-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .fact-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .fact-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .fact-card p {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        /* Quiz Section */
+        .quiz-section {
+            padding: 4rem 2rem;
+            background: white;
+        }
+
+        .quiz-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .score {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .question {
+            margin-bottom: 2rem;
+        }
+
+        .question h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+            font-size: 1.3rem;
+        }
+
+        .options {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .option {
+            background: white;
+            padding: 1rem 1.5rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            background: rgba(26, 115, 232, 0.05);
+        }
+
+        .option.correct {
+            border-color: var(--secondary);
+            background: rgba(52, 168, 83, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: var(--accent);
+            background: rgba(234, 67, 53, 0.1);
+        }
+
+        .quiz-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .quiz-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .quiz-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--darker);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .facts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Periodic Table Mini */
+        .periodic-highlight {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 0.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">⚛️ Kimyo</div>
+            <ul class="nav-links">
+                <li><a href="#home" data-translate="nav_home">Bosh sahifa</a></li>
+                <li><a href="#molecules" data-translate="nav_molecules">3D Molekulalar</a></li>
+                <li><a href="#facts" data-translate="nav_facts">Faktlar</a></li>
+                <li><a href="#quiz" data-translate="nav_quiz">Test</a></li>
+            </ul>
+            <select class="lang-selector" id="langSelector">
+                <option value="uz">🇺🇿 O'zbek tili</option>
+                <option value="en">🇬🇧 English</option>
+                <option value="ru">🇷🇺 Русский</option>
+                <option value="tr">🇹🇷 Türkçe</option>
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="zh">🇨🇳 中文</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="de">🇩🇪 Deutsch</option>
+                <option value="ja">🇯🇵 日本語</option>
+                <option value="ko">🇰🇷 한국어</option>
+                <option value="pt">🇵🇹 Português</option>
+                <option value="it">🇮🇹 Italiano</option>
+                <option value="nl">🇳🇱 Nederlands</option>
+                <option value="pl">🇵🇱 Polski</option>
+                <option value="sv">🇸🇪 Svenska</option>
+                <option value="hi">🇮🇳 हिन्दी</option>
+                <option value="bn">🇧🇩 বাংলা</option>
+                <option value="fa">🇮🇷 فارسی</option>
+                <option value="kk">🇰🇿 Қазақша</option>
+            </select>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <h1 data-translate="hero_title">Kimyo - Moddalar Olamining Kaliti</h1>
+        <p data-translate="hero_desc">Zamonaviy interaktiv platformada kimyo fanining sirli olamini kashf eting. 100+ qiziqarli fakt, 30+ 3D molekula va professional test tizimi bilan o'rganing.</p>
+        <div class="creators">
+            <h3 data-translate="creators_title">Yaratuvchilar:</h3>
+            <p>1. Rustamov Bo'rixon | 2. Oqilov Qosim | 3. Raximxojayev Ubaydulla</p>
+        </div>
+    </section>
+
+    <!-- 3D Molecules Section -->
+    <section id="molecules">
+        <h2 class="section-title" data-translate="molecules_title">3D Molekula Animatsiyalari</h2>
+        <div class="molecule-container" id="moleculesGrid">
+            <!-- Molecules will be generated here -->
+        </div>
+    </section>
+
+    <!-- Facts Section -->
+    <section class="facts-section" id="facts">
+        <h2 class="section-title" data-translate="facts_title">100+ Qiziqarli Kimyo Faktlari</h2>
+        <div class="facts-grid" id="factsGrid">
+            <!-- Facts will be generated here -->
+        </div>
+    </section>
+
+    <!-- Quiz Section -->
+    <section class="quiz-section" id="quiz">
+        <h2 class="section-title" data-translate="quiz_title">Kimyo Bilimingizni Sinab Ko'ring</h2>
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <div>
+                    <span data-translate="question_label">Savol:</span> <span id="questionNumber">1</span> / 16
+                </div>
+                <div class="score">
+                    <span data-translate="score_label">Ball:</span> <span id="currentScore">0</span> / 40
+                </div>
+            </div>
+            <div id="quizContent">
+                <!-- Quiz will be generated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Kimyo Platformasi | Yaratuvchilar: Rustamov Bo'rixon, Oqilov Qosim, Raximxojayev Ubaydulla</p>
+    </footer>
+
+    <script>
+        // Translation Dictionary
+        const translations = {
+            uz: {
+                nav_home: "Bosh sahifa",
+                nav_molecules: "3D Molekulalar",
+                nav_facts: "Faktlar",
+                nav_quiz: "Test",
+                hero_title: "Kimyo - Moddalar Olamining Kaliti",
+                hero_desc: "Zamonaviy interaktiv platformada kimyo fanining sirli olamini kashf eting. 100+ qiziqarli fakt, 30+ 3D molekula va professional test tizimi bilan o'rganing.",
+                creators_title: "Yaratuvchilar:",
+                molecules_title: "3D Molekula Animatsiyalari",
+                facts_title: "100+ Qiziqarli Kimyo Faktlari",
+                quiz_title: "Kimyo Bilimingizni Sinab Ko'ring",
+                question_label: "Savol:",
+                score_label: "Ball:"
+            },
+            en: {
+                nav_home: "Home",
+                nav_molecules: "3D Molecules",
+                nav_facts: "Facts",
+                nav_quiz: "Quiz",
+                hero_title: "Chemistry - Key to the World of Substances",
+                hero_desc: "Discover the mysterious world of chemistry on a modern interactive platform. Learn with 100+ interesting facts, 30+ 3D molecules, and a professional testing system.",
+                creators_title: "Creators:",
+                molecules_title: "3D Molecule Animations",
+                facts_title: "100+ Interesting Chemistry Facts",
+                quiz_title: "Test Your Chemistry Knowledge",
+                question_label: "Question:",
+                score_label: "Score:"
+            },
+            ru: {
+                nav_home: "Главная",
+                nav_molecules: "3D Молекулы",
+                nav_facts: "Факты",
+                nav_quiz: "Тест",
+                hero_title: "Химия - Ключ к миру веществ",
+                hero_desc: "Откройте для себя загадочный мир химии на современной интерактивной платформе. Учитесь с 100+ интересными фактами, 30+ 3D молекулами и профессиональной системой тестирования.",
+                creators_title: "Создатели:",
+                molecules_title: "3D Анимации Молекул",
+                facts_title: "100+ Интересных Фактов по Химии",
+                quiz_title: "Проверьте свои знания по химии",
+                question_label: "Вопрос:",
+                score_label: "Балл:"
+            }
+            // Add more languages as needed
+        };
+
+        // Molecules Data
+        const molecules = [
+            { name: "Suv (H₂O)", atoms: [{x: 50, y: 100, r: 30, color: '#ff0000'}, {x: 30, y: 70, r: 20, color: '#ffffff'}, {x: 70, y: 70, r: 20, color: '#ffffff'}] },
+            { name: "Karbonat angidrid (CO₂)", atoms: [{x: 50, y: 100, r: 25, color: '#000000'}, {x: 20, y: 100, r: 30, color: '#ff0000'}, {x: 80, y: 100, r: 30, color: '#ff0000'}] },
+            { name: "Metan (CH₄)", atoms: [{x: 50, y: 100, r: 30, color: '#000000'}, {x: 50, y: 60, r: 20, color: '#ffffff'}, {x: 50, y: 140, r: 20, color: '#ffffff'}, {x: 10, y: 100, r: 20, color: '#ffffff'}, {x: 90, y: 100, r: 20, color: '#ffffff'}] },
+            { name: "Ammoniak (NH₃)", atoms: [{x: 50, y: 100, r: 28, color: '#0000ff'}, {x: 50, y: 65, r: 20, color: '#ffffff'}, {x: 25, y: 120, r: 20, color: '#ffffff'}, {x: 75, y: 120, r: 20, color: '#ffffff'}] },
+            { name: "Etanol (C₂H₅OH)", atoms: [{x: 30, y: 100, r: 25, color: '#000000'}, {x: 70, y: 100, r: 25, color: '#000000'}, {x: 100, y: 100, r: 28, color: '#ff0000'}, {x: 30, y: 70, r: 18, color: '#ffffff'}, {x: 30, y: 130, r: 18, color: '#ffffff'}] },
+            { name: "Benzol (C₆H₆)", atoms: [{x: 50, y: 60, r: 22, color: '#000000'}, {x: 85, y: 80, r: 22, color: '#000000'}, {x: 85, y: 120, r: 22, color: '#000000'}, {x: 50, y: 140, r: 22, color: '#000000'}, {x: 15, y: 120, r: 22, color: '#000000'}, {x: 15, y: 80, r: 22, color: '#000000'}] },
+            { name: "Sulfat kislota (H₂SO₄)", atoms: [{x: 50, y: 100, r: 30, color: '#ffff00'}, {x: 50, y: 60, r: 28, color: '#ff0000'}, {x: 50, y: 140, r: 28, color: '#ff0000'}, {x: 10, y: 100, r: 28, color: '#ff0000'}, {x: 90, y: 100, r: 28, color: '#ff0000'}] },
+            { name: "Glyukoza (C₆H₁₂O₆)", atoms: [{x: 50, y: 80, r: 20, color: '#000000'}, {x: 80, y: 100, r: 20, color: '#000000'}, {x: 50, y: 120, r: 20, color: '#000000'}, {x: 20, y: 100, r: 20, color: '#000000'}] },
+            { name: "Osh tuzi (NaCl)", atoms: [{x: 35, y: 100, r: 28, color: '#a0a0a0'}, {x: 65, y: 100, r: 26, color: '#00ff00'}] },
+            { name: "Asetilen (C₂H₂)", atoms: [{x: 40, y: 100, r: 25, color: '#000000'}, {x: 60, y: 100, r: 25, color: '#000000'}, {x: 20, y: 100, r: 18, color: '#ffffff'}, {x: 80, y: 100, r: 18, color: '#ffffff'}] },
+            { name: "Azot (N₂)", atoms: [{x: 40, y: 100, r: 28, color: '#0000ff'}, {x: 60, y: 100, r: 28, color: '#0000ff'}] },
+            { name: "Kislorod (O₂)", atoms: [{x: 40, y: 100, r: 30, color: '#ff0000'}, {x: 60, y: 100, r: 30, color: '#ff0000'}] },
+            { name: "Vodorod (H₂)", atoms: [{x: 40, y: 100, r: 22, color: '#ffffff'}, {x: 60, y: 100, r: 22, color: '#ffffff'}] },
+            { name: "Ftorid vodorod (HF)", atoms: [{x: 40, y: 100, r: 22, color: '#ffffff'}, {x: 65, y: 100, r: 26, color: '#90ee90'}] },
+            { name: "Xlorid vodorod (HCl)", atoms: [{x: 35, y: 100, r: 22, color: '#ffffff'}, {x: 65, y: 100, r: 28, color: '#00ff00'}] },
+            { name: "Fosfin (PH₃)", atoms: [{x: 50, y: 100, r: 28, color: '#ffa500'}, {x: 50, y: 65, r: 20, color: '#ffffff'}, {x: 25, y: 120, r: 20, color: '#ffffff'}, {x: 75, y: 120, r: 20, color: '#ffffff'}] },
+            { name: "Silan (SiH₄)", atoms: [{x: 50, y: 100, r: 26, color: '#808080'}, {x: 50, y: 65, r: 20, color: '#ffffff'}, {x: 50, y: 135, r: 20, color: '#ffffff'}, {x: 15, y: 100, r: 20, color: '#ffffff'}, {x: 85, y: 100, r: 20, color: '#ffffff'}] },
+            { name: "Azot oksid (NO)", atoms: [{x: 40, y: 100, r: 28, color: '#0000ff'}, {x: 65, y: 100, r: 30, color: '#ff0000'}] },
+            { name: "Karbonat angidrid (CO)", atoms: [{x: 40, y: 100, r: 25, color: '#000000'}, {x: 65, y: 100, r: 30, color: '#ff0000'}] },
+            { name: "Ozon (O₃)", atoms: [{x: 35, y: 100, r: 30, color: '#ff0000'}, {x: 65, y: 100, r: 30, color: '#ff0000'}, {x: 50, y: 70, r: 30, color: '#ff0000'}] },
+            { name: "Suv peroksidi (H₂O₂)", atoms: [{x: 40, y: 90, r: 28, color: '#ff0000'}, {x: 60, y: 110, r: 28, color: '#ff0000'}, {x: 25, y: 75, r: 18, color: '#ffffff'}, {x: 75, y: 125, r: 18, color: '#ffffff'}] },
+            { name: "Dizel (C₁₂H₂₆)", atoms: [{x: 50, y: 80, r: 18, color: '#000000'}, {x: 50, y: 120, r: 18, color: '#000000'}] },
+            { name: "Propan (C₃H₈)", atoms: [{x: 30, y: 100, r: 22, color: '#000000'}, {x: 50, y: 100, r: 22, color: '#000000'}, {x: 70, y: 100, r: 22, color: '#000000'}] },
+            { name: "Butan (C₄H₁₀)", atoms: [{x: 25, y: 100, r: 20, color: '#000000'}, {x: 45, y: 100, r: 20, color: '#000000'}, {x: 65, y: 100, r: 20, color: '#000000'}, {x: 85, y: 100, r: 20, color: '#000000'}] },
+            { name: "Aseton (C₃H₆O)", atoms: [{x: 35, y: 100, r: 22, color: '#000000'}, {x: 55, y: 100, r: 22, color: '#000000'}, {x: 75, y: 100, r: 26, color: '#ff0000'}] },
+            { name: "Sirka kislota (CH₃COOH)", atoms: [{x: 30, y: 100, r: 22, color: '#000000'}, {x: 50, y: 100, r: 22, color: '#000000'}, {x: 70, y: 100, r: 28, color: '#ff0000'}] },
+            { name: "Formaldegid (CH₂O)", atoms: [{x: 40, y: 100, r: 25, color: '#000000'}, {x: 65, y: 100, r: 28, color: '#ff0000'}, {x: 40, y: 75, r: 18, color: '#ffffff'}] },
+            { name: "Metanol (CH₃OH)", atoms: [{x: 40, y: 100, r: 25, color: '#000000'}, {x: 65, y: 100, r: 28, color: '#ff0000'}, {x: 40, y: 75, r: 18, color: '#ffffff'}] },
+            { name: "DMSO (C₂H₆OS)", atoms: [{x: 35, y: 100, r: 22, color: '#000000'}, {x: 65, y: 100, r: 22, color: '#000000'}, {x: 50, y: 75, r: 28, color: '#ff0000'}] },
+            { name: "Asetilxolin (C₇H₁₆NO₂)", atoms: [{x: 50, y: 100, r: 20, color: '#0000ff'}] }
+        ];
+
+        // Facts Data (100+ facts)
+        const facts = [
+            {
+                title: "Suvning anomal xususiyati",
+                content: "Suv muzlaganda kengayadi, bu esa muzning suv ustida suzishiga olib keladi. Bu tabiatdagi noyob hodisa bo'lib, aksariyat moddalar sovutilganda siqiladi. Bu xususiyat baliqlar va suv organizmlarining qishda omon qolishini ta'minlaydi."
+            },
+            {
+                title: "Oltin erituvchi",
+                content: "Oltin faqat 'aqua regia' (qirollik suvi) deb ataladigan kislotalar aralashmasida eriydi. Bu aralashma konsentrlangan nitrat va xlorid kislotalaridan iborat bo'lib, oltin va platina kabi inert metallarni ham eritadi."
+            },
+            {
+                title: "Vodorod - eng yengil element",
+                content: "Vodorod koinotdagi eng ko'p tarqalgan element bo'lib, barcha oddiy moddalarning 75% ini tashkil qiladi. Uning atom massasi atigi 1.008 g/mol va u rangsiz, hidsiz gazdir."
+            },
+            {
+                title: "Kislorodning hayotdagi ahamiyati",
+                content: "Kislorod Yer atmosferasining 21% ini tashkil qiladi. U fotosintez jarayonida o'simliklar tomonidan ishlab chiqariladi va barcha aerob organizmlar nafas olishi uchun zarur. Kislorodsiz odam 3-5 daqiqa ichida o'ladi."
+            },
+            {
+                title: "Olmos va grafit farqi",
+                content: "Olmos va grafit ikkalasi ham uglerod atomlaridan tashkil topgan, lekin ularning tuzilishi butunlay boshqacha. Olmosda atomlar tetraedral shaklda bog'langan, grafitda esa qatlamli. Shuning uchun olmos dunyodagi eng qattiq tabiiy modda, grafit esa juda yumshoq."
+            },
+            {
+                title: "Simob - suyuq metall",
+                content: "Simob xona haroratida suyuq holatda bo'lgan yagona metall. Uning erish harorati -38.83°C. Simob termometrlarda, barometrlarda va ba'zi elektr qurilmalarda ishlatiladi, lekin u zaharli moddadir."
+            },
+            {
+                title: "Azotning inertligi",
+                content: "Azot atmosferaning 78% ini tashkil qiladi, lekin u juda inert gaz. Uch bog'li azot molekulasi (N≡N) juda mustahkam bo'lib, uni uzish uchun katta energiya talab qilinadi. Shuning uchun ko'pchilik reaksiyalarda azot ishtirok etmaydi."
+            },
+            {
+                title: "Temir - eng ko'p ishlatiladigan metall",
+                content: "Temir Yer qobig'ida eng ko'p tarqalgan metall bo'lib, po'lat ishlab chiqarishda asosiy material hisoblanadi. Inson tanasida ham temir mavjud va u gemoglobin tarkibiga kirib, kislorodni tashishda muhim rol o'ynaydi."
+            },
+            {
+                title: "Ftor - eng reaktiv element",
+                content: "Ftor barcha elementlar orasida eng yuqori elektromanfiylikka ega va eng reaktiv elementdir. U deyarli barcha moddalar bilan reaksiyaga kirishadi, hatto ba'zi inert gazlar bilan ham. Ftorli birikmalar tish pastasi va suvni ftorlashda ishlatiladi."
+            },
+            {
+                title: "Geliy - ikkinchi eng yengil element",
+                content: "Geliy vodoroddan keyingi eng yengil element bo'lib, u inert gazdir. U havo sharlarini to'ldirishda ishlatiladi, chunki u vodorod kabi yonmaydi. Geliyning qaynash harorati -268.9°C, bu mutlaq nolga eng yaqin harorat."
+            },
+            {
+                title: "Uran - radioaktiv element",
+                content: "Uran tabiiy ravishda uchraydigan eng og'ir element bo'lib, u radioaktivdir. U atom elektr stansiyalarida yoqilg'i sifatida ishlatiladi. Bir kilogramm uran 3 million kilogramm ko'mirga teng energiya beradi."
+            },
+            {
+                title: "Platinaning noyobligi",
+                content: "Platinum Yer qobig'ida juda kam uchraydigan qimmatbaho metall. U korroziyaga chidamli va yuqori haroratlarda ham barqaror. Platin katalizatorlar, zargarlik buyumlari va tibbiyot asboblarida ishlatiladi."
+            },
+            {
+                title: "Misdan foydalanish tarixi",
+                content: "Mis insoniyat tomonidan ishlatilgan eng qadimgi metallardan biri. Miloddan avvalgi 8000-yillardanoq misdan tangalar, qurollar va bezak buyumlari yasalgan. Mis elektr o'tkazuvchanligi yuqori bo'lgani uchun bugungi kunda ham simlarda keng ishlatiladi."
+            },
+            {
+                title: "Kremniy - yarimo'tkazgich",
+                content: "Kremniy Yer qobig'ida kisloroddan keyin eng ko'p tarqalgan element. U kompyuter chiplari, quyosh batareyalari va yarimo'tkazgichlarning asosiy materiali. Kremniy oksidi (qum) shisha ishlab chiqarishda asosiy xomashyo hisoblanadi."
+            },
+            {
+                title: "Yod - qalqonsimon bez uchun zarur",
+                content: "Yod inson organizmi uchun muhim mikroelement bo'lib, u qalqonsimon bez faoliyati uchun zarur. Yod etishmovchiligi tiroksin gormoni yetishmovchiligiga olib keladi. Yod eritmasi antiseptik sifatida ham ishlatiladi."
+            },
+            {
+                title: "Xlor - suvni tozalashda",
+                content: "Xlor suvni zararsizlantirishda keng qo'llaniladi. U bakteriyalar va viruslarni o'ldiradi, shuning uchun ichimlik suvi va suzish hovuzlarida ishlatiladi. Xlor gaz holatida zaharli, lekin suvda eritilganda xavfsiz miqdorda qo'llaniladi."
+            },
+            {
+                title: "Natriy - suv bilan portlovchi metall",
+                content: "Natriy ishqoriy metall bo'lib, suv bilan juda kuchli reaksiyaga kirishadi. Reaksiya natijasida vodorod gazi va issiqlik chiqadi, bu esa portlashga olib kelishi mumkin. Shuning uchun natriy kerosinda saqlanadi."
+            },
+            {
+                title: "Kalsiy - suyaklar uchun muhim",
+                content: "Kalsiy inson tanasidagi eng ko'p miqdordagi mineral bo'lib, u suyaklar va tishlarning mustahkamligini ta'minlaydi. Kalsiy etishmovchiligi osteoporoz kasalligiga olib keladi. Sut mahsulotlari kalsiyning eng yaxshi manbai hisoblanadi."
+            },
+            {
+                title: "Magniy - engil metall",
+                content: "Magniy alyuminiydan ham engil metall bo'lib, u samolyotlar va avtomobillar ishlab chiqarishda ishlatiladi. Magniy yonganida juda yorqin oq nur chiqaradi, shuning uchun u fotogrfiya va pirotexnikada qo'llaniladi."
+            },
+            {
+                title: "Rux - galvanizatsiya",
+                content: "Rux metallarni korroziyadan himoya qilish uchun ishlatiladi. Galvanizatsiya jarayonida temir yoki po'lat rux qatlami bilan qoplanadi. Bu usul metallning umrini bir necha baravar uzaytiradi."
+            },
+            {
+                title: "Volfram - eng yuqori erish harorati",
+                content: "Volfram barcha metallar orasida eng yuqori erish haroratiga ega (3422°C). Shuning uchun u elektr lampochkalaridagi tolalar ishlab chiqarishda ishlatiladi. Volfram juda qattiq va yuqori haroratlarda ham shaklini saqlaydi."
+            },
+            {
+                title: "Titan - mustahkam va engil",
+                content: "Titan po'lat kabi mustahkam, lekin undan 45% engil. U korroziyaga juda chidamli va tibbiy implantlarda keng ishlatiladi, chunki u inson tanasi tomonidan rad etilmaydi."
+            },
+            {
+                title: "Kumush - eng yaxshi o'tkazgich",
+                content: "Kumush barcha metallar orasida eng yuqori elektr va issiqlik o'tkazuvchanlikka ega. U elektronika, zargarlik buyumlari va fotogrfiyada ishlatiladi. Kumush bakteritsid xususiyatga ega bo'lib, suvni tozalashda ham qo'llaniladi."
+            },
+            {
+                title: "Nikel - zanglamaydigan po'lat",
+                content: "Nikel zanglamaydigan po'latning asosiy tarkibiy qismi bo'lib, u metallning korroziyaga chidamliligini oshiradi. Nikel tangalar, zargarlik buyumlari va batareyalarda ishlatiladi."
+            },
+            {
+                title: "Qo'rg'oshin - og'ir metall",
+                content: "Qo'rg'oshin yumshoq, og'ir va zaharli metall. U akkumulyatorlar, radiatsiyadan himoya qiluvchi ekranlar va ba'zi lehimlarda ishlatiladi. Qo'rg'oshin zaharlanishi jiddiy sog'liq muammolariga olib keladi."
+            },
+            {
+                title: "Qalay - konserva bankalari",
+                content: "Qalay korroziyaga chidamli metall bo'lib, u konserva bankalarini qoplashda ishlatiladi. Bu usul oziq-ovqatni uzoq muddat saqlash imkonini beradi. Qalay juda yumshoq va oson eriydigan metall."
+            },
+            {
+                title: "Margimush - zaharli element",
+                content: "Margimush juda zaharli yarimmetall bo'lib, u tarixda zaharlash uchun ishlatilgan. Bugungi kunda u yarimo'tkazgichlar va ba'zi dori-darmonlarda qo'llaniladi. Margimushning barcha birikmalari zaharli hisoblanadi."
+            },
+            {
+                title: "Selen - fotogrfiya elementi",
+                content: "Selen yorug'lik ta'sirida elektr o'tkazuvchanligini o'zgartiradi, shuning uchun u fotogrfiya va quyosh batareyalarida ishlatiladi. Selen inson organizmi uchun muhim mikroelement, lekin ortiqcha miqdorda zaharli."
+            },
+            {
+                title: "Brom - suyuq metallmas",
+                content: "Brom xona haroratida suyuq holatda bo'lgan yagoni metallmas element. U qizil-jigarrang rangli, o'tkir hidli va zaharli suyuqlik. Brom fotogrfiya, dori-darmonlar va o't o'chirgichlarda ishlatiladi."
+            },
+            {
+                title: "Fosfor - yonuvchi element",
+                content: "Oq fosfor havoda o'z-o'zidan yonadi, shuning uchun u suv ostida saqlanadi. Qizil fosfor esa barqaror va gugurt ishlab chiqarishda ishlatiladi. Fosfor DNK va ATF molekulalarining muhim tarkibiy qismi."
+            },
+            {
+                title: "Oltingugurt - vulqon elementi",
+                content: "Oltingugurt sariq rangli, mo'rt kristall modda. U vulqonlar atrofida ko'p uchraydi. Oltingugurt gugurt, barut, dori-darmonlar va kauchuk ishlab chiqarishda ishlatiladi. U vodorod sulfid (H₂S) tarkibiga kiradi."
+            },
+            {
+                title: "Kobalt - ko'k pigment",
+                content: "Kobalt ko'k rangli birikmalar hosil qiladi, shuning uchun u qadimdan shisha va keramikani bo'yashda ishlatilgan. Kobalt magnit xossalari yuqori bo'lgan qotishmalar tarkibiga kiradi va akkumulyatorlarda ham qo'llaniladi."
+            },
+            {
+                title: "Molibden - mustahkam qotishmalar",
+                content: "Molibden yuqori haroratlarda mustahkamligini saqlaydigan qotishmalar tarkibiga qo'shiladi. U po'latning mustahkamligini oshiradi va aviatsiya sanoatida keng ishlatiladi."
+            },
+            {
+                title: "Vanadiy - po'lat mustahkamlovchi",
+                content: "Vanadiy po'latga qo'shilganda uning mustahkamligi va chidamliligi oshadi. Vanadiyli po'lat asboblar, prujinalar va avtomobil qismlarini ishlab chiqarishda ishlatiladi."
+            },
+            {
+                title: "Xrom - yaltiroq qoplama",
+                content: "Xrom yaltiroq, korroziyaga chidamli metall bo'lib, u zanglamaydigan po'lat va yaltiroq qoplamalar ishlab chiqarishda ishlatiladi. Xrom(III) oksidi yashil pigment sifatida ham qo'llaniladi."
+            },
+            {
+                title: "Marganes - po'lat qotishmasi",
+                content: "Marganes po'latning mustahkamligi va qattiqligini oshiradi. U temir yo'l relslari va og'ir texnika qismlarini ishlab chiqarishda ishlatiladi. Marganes inson organizmi uchun ham muhim mikroelement."
+            },
+            {
+                title: "Torium - radioaktiv element",
+                content: "Torium uranga o'xshash radioaktiv element bo'lib, u atom energiyasi uchun potentsial yoqilg'i hisoblanadi. Torium uranga qaraganda ko'proq tarqalgan va xavfsizroq bo'lishi mumkin."
+            },
+            {
+                title: "Litiy - eng engil metall",
+                content: "Litiy barcha metallar orasida eng engil bo'lib, u suvda suzadi. Litiy batareyalarda keng ishlatiladi, chunki u yuqori energiya zichligiga ega. Litiy shuningdek, bipolyar buzilishni davolashda ham qo'llaniladi."
+            },
+            {
+                title: "Berilliy - kosmik sanoatda",
+                content: "Berilliy juda engil va mustahkam metall bo'lib, u kosmik kemalar va samolyotlar ishlab chiqarishda ishlatiladi. Berilliy rentgen nurlarini o'tkazadi, shuning uchun rentgen trubkalarida ham qo'llaniladi."
+            },
+            {
+                title: "Bor - yarimo'tkazgich",
+                content: "Bor yarimo'tkazgich xususiyatiga ega bo'lib, u elektronika sanoatida muhim rol o'ynaydi. Bor karbid juda qattiq modda bo'lib, kesish asboblarida ishlatiladi. Boraks esa tozalash vositasi sifatida qo'llaniladi."
+            },
+            {
+                title: "Alyuminiy - eng ko'p tarqalgan metall",
+                content: "Alyuminiy Yer qobig'ida eng ko'p tarqalgan metall bo'lib, u engil, mustahkam va korroziyaga chidamli. Alyuminiy samolyotlar, avtomobillar, idish-tovoq va qurilish materiallarida keng ishlatiladi."
+            },
+            {
+                title: "Galliy - qo'lda eriydigan metall",
+                content: "Galliyning erish harorati 29.76°C bo'lib, u qo'l issiqligida eriydi. Galliy yarimo'tkazgichlar va LED lampalar ishlab chiqarishda ishlatiladi. U yuqori haroratlarda ham barqaror bo'lgan qotishmalar tarkibiga kiradi."
+            },
+            {
+                title: "Indiy - sensor ekranlar",
+                content: "Indiy shaffof va elektr o'tkazuvchan oksid hosil qiladi, shuning uchun u sensor ekranlar va LCD displeylar ishlab chiqarishda ishlatiladi. Indiy juda yumshoq metall bo'lib, oson shakllanadi."
+            },
+            {
+                title: "Talliy - juda zaharli metall",
+                content: "Talliy juda zaharli metall bo'lib, u tarixda zaharlash uchun ishlatilgan. Talliy yarimo'tkazgichlar va maxsus shisha ishlab chiqarishda qo'llaniladi. Talliy zaharlanishi soch to'kilishi va asab tizimi zararlanishiga olib keladi."
+            },
+            {
+                title: "Seziy - eng reaktiv metall",
+                content: "Seziy suv bilan juda kuchli reaksiyaga kirishadi, hatto muz bilan ham portlaydi. Seziyning erish harorati 28.5°C bo'lib, u issiq kunlarda suyuq holatda bo'lishi mumkin. Seziy atom soatlarida ishlatiladi."
+            },
+            {
+                title: "Rubidiy - fotogrfiya elementi",
+                content: "Rubidiy ishqoriy metall bo'lib, u fotogrfiya va maxsus shisha ishlab chiqarishda ishlatiladi. Rubidiy suv bilan reaksiyaga kirishadi, lekin seziy kabi kuchli emas."
+            },
+            {
+                title: "Stronsiy - qizil rang",
+                content: "Stronsiy birikmalari yonganida qizil rang chiqaradi, shuning uchun u pirotexnika va signal raketalarida ishlatiladi. Stronsiy kalsiyga o'xshash xususiyatlarga ega va suyaklarda to'planadi."
+            },
+            {
+                title: "Bariy - rentgen tekshiruvi",
+                content: "Bariy sulfat rentgen nurlarini yutadi, shuning uchun u oshqozon-ichak traktini rentgen tekshiruvida ishlatiladi. Bariy sulfat erimaydi, shuning uchun u xavfsiz hisoblanadi, lekin bariyning boshqa birikmalari zaharli."
+            },
+            {
+                title: "Radiy - radioaktiv kashfiyot",
+                content: "Radiy Mariya va Per Kyuri tomonidan kashf etilgan radioaktiv element. U tibbiyotda saraton kasalligini davolashda ishlatilgan. Radiy qorong'ida yonadi, chunki u doimiy ravishda energiya chiqaradi."
+            },
+            {
+                title: "Poloniy - juda zaharli",
+                content: "Poloniy juda zaharli radioaktiv element bo'lib, u juda kichik miqdorda ham o'limga olib keladi. Poloniy atom bombalarida va kosmik kemalarda issiqlik manbai sifatida ishlatilgan."
+            },
+            {
+                title: "Radon - radioaktiv gaz",
+                content: "Radon rangsiz, hidsiz radioaktiv gaz bo'lib, u tabiiy ravishda tuproq va toshlardan chiqadi. Radon uylarda to'planib, o'pka saratoniga olib kelishi mumkin. Shuning uchun uylarni muntazam ventilyatsiya qilish muhim."
+            },
+            {
+                title: "Neon - yorqin chiroqlar",
+                content: "Neon inert gaz bo'lib, elektr toki o'tganda yorqin qizil-to'q sariq nur chiqaradi. Neon chiroqlari reklama va bezak uchun ishlatiladi. Boshqa inert gazlar ham turli ranglarda nur chiqaradi."
+            },
+            {
+                title: "Argon - payvandlashda himoya",
+                content: "Argon atmosferada eng ko'p tarqalgan inert gaz bo'lib, u payvandlashda himoya muhiti sifatida ishlatiladi. Argon metallarning oksidlanishini oldini oladi. U shuningdek, lampalarda va yarimo'tkazgichlar ishlab chiqarishda ham qo'llaniladi."
+            },
+            {
+                title: "Kripton - yuqori samarali lampalar",
+                content: "Kripton inert gaz bo'lib, u yuqori samarali lampalar va fotogrfiya chiroqlarida ishlatiladi. Kripton lazerlarda ham qo'llaniladi. U atmosferada juda kam miqdorda mavjud."
+            },
+            {
+                title: "Ksenon - tibbiy anesteziya",
+                content: "Ksenon inert gaz bo'lib, u anesteziya sifatida ishlatilishi mumkin. Ksenon lampalar juda yorqin nur chiqaradi va avtomobil faralarida ishlatiladi. Ksenon ion dvigatellarida ham qo'llaniladi."
+            },
+            {
+                title: "Radon xavfi",
+                content: "Radon ikkinchi eng ko'p o'pka saratoni sababchisi hisoblanadi. U tuproqdan chiqib, uylarda to'planadi. Radon darajasini tekshirish va kerak bo'lsa, ventilyatsiya tizimini o'rnatish muhim."
+            },
+            {
+                title: "Vodorod yoqilg'isi",
+                content: "Vodorod toza yoqilg'i hisoblanadi, chunki yonganida faqat suv hosil bo'ladi. Vodorod yoqilg'i elementlari avtomobillar va kosmik kemalarda ishlatiladi. Lekin vodorodni saqlash va tashish qiyin."
+            },
+            {
+                title: "Fotosintez kimyosi",
+                content: "Fotosintez jarayonida o'simliklar quyosh energiyasidan foydalanib, karbonat angidrid va suvdan glyukoza va kislorod ishlab chiqaradi. Bu jarayon Yer atmosferasidagi kislorodning asosiy manbai."
+            },
+            {
+                title: "Ozon qatlami",
+                content: "Ozon qatlami Yer atmosferasida joylashgan bo'lib, u zararli ultrabinafsha nurlarni yutadi. Ozon uchta kislorod atomidan tashkil topgan (O₃). Freonlar va boshqa kimyoviy moddalar ozon qatlamini buzadi."
+            },
+            {
+                title: "Kislota yomg'iri",
+                content: "Kislota yomg'iri atmosferadagi oltingugurt dioksid va azot oksidlari suv bilan reaksiyaga kirishib, sulfat va nitrat kislotalar hosil qilganda yuzaga keladi. Bu hodisa o'rmonlar, ko'llar va binolarga zarar yetkazadi."
+            },
+            {
+                title: "pH shkalasi",
+                content: "pH shkalasi eritmaning kislotali yoki ishqoriy ekanligini ko'rsatadi. pH 0 dan 14 gacha bo'lib, 7 neytral, 7 dan kichik kislotali, 7 dan katta ishqoriy muhitni bildiradi. Inson qoni pH 7.35-7.45 oralig'ida bo'lishi kerak."
+            },
+            {
+                title: "Katalizatorlar",
+                content: "Katalizatorlar reaksiya tezligini oshiradi, lekin o'zlari reaksiyada sarflanmaydi. Ular sanoatda, avtomobil katalizatorlarida va inson tanasidagi fermentlarda muhim rol o'ynaydi."
+            },
+            {
+                title: "Polimerlar",
+                content: "Polimerlar uzun zanjirli molekulalar bo'lib, ular plastik, rezina, tola va oqsillarni tashkil qiladi. Polimerlar tabiiy (sellyuloza, oqsil) va sintetik (polietilen, polistirol) bo'lishi mumkin."
+            },
+            {
+                title: "Kristallar tuzilishi",
+                content: "Kristallar atomlar, ionlar yoki molekulalarning tartibli joylashishidan hosil bo'ladi. Kristallar turli shakllarda bo'lishi mumkin: kubik, tetragonal, geksagonal va boshqalar. Olmos va tuz kubik kristal tuzilishga ega."
+            },
+            {
+                title: "Izomerlar",
+                content: "Izomerlar bir xil kimyoviy formulaga, lekin turli tuzilishga ega molekulalar. Masalan, butan va izobutan ikkalasi ham C₄H₁₀ formulaga ega, lekin atomlar turlicha joylashgan. Izomerlar turli xususiyatlarga ega bo'lishi mumkin."
+            },
+            {
+                title: "Organik kimyo",
+                content: "Organik kimyo uglerod birikmalarini o'rganadi. Uglerod atomlari uzun zanjirlar va halqalar hosil qila oladi, shuning uchun organik birikmalar juda xilma-xil. Organik kimyo tibbiyot, qishloq xo'jaligi va sanoatda muhim rol o'ynaydi."
+            },
+            {
+                title: "Noorganik kimyo",
+                content: "Noorganik kimyo uglerodsiz birikmalarni o'rganadi (ba'zi istisnolardan tashqari). U metallar, minerallar, kislotalar va asoslarni o'z ichiga oladi. Noorganik kimyo qurilish, metallurgiya va elektronika sanoatida muhim."
+            },
+            {
+                title: "Fizik kimyo",
+                content: "Fizik kimyo kimyoviy jarayonlarning fizik asoslarini o'rganadi. U termodinamika, kinetika, kvant mexanikasi va elektrokimyoni o'z ichiga oladi. Fizik kimyo yangi materiallar va texnologiyalarni ishlab chiqishda muhim."
+            },
+            {
+                title: "Analitik kimyo",
+                content: "Analitik kimyo moddalarning tarkibi va miqdorini aniqlash usullarini o'rganadi. U sifat va miqdor tahliliga bo'linadi. Analitik kimyo tibbiyot, atrof-muhitni muhofaza qilish va sifat nazoratida muhim rol o'ynaydi."
+            },
+            {
+                title: "Biokimyo",
+                content: "Biokimyo tirik organizmlardagi kimyoviy jarayonlarni o'rganadi. U oqsillar, uglevodlar, lipidlar va nuklein kislotalarni o'z ichiga oladi. Biokimyo tibbiyot, genetika va farmatsevtika sohasida muhim."
+            },
+            {
+                title: "Elektrokimyo",
+                content: "Elektrokimyo kimyoviy va elektr energiyasi o'rtasidagi munosabatlarni o'rganadi. U batareyalar, akkumulyatorlar, elektroliz va korroziya jarayonlarini o'z ichiga oladi. Elektrokimyo energiya saqlash texnologiyalarida muhim."
+            },
+            {
+                title: "Termokimyo",
+                content: "Termokimyo kimyoviy reaksiyalardagi issiqlik o'zgarishlarini o'rganadi. Ekzotermik reaksiyalar issiqlik chiqaradi, endotermik reaksiyalar esa issiqlik yutadi. Termokimyo energetika va sanoat jarayonlarida muhim."
+            },
+            {
+                title: "Kimyoviy kinetika",
+                content: "Kimyoviy kinetika reaksiyalar tezligini va unga ta'sir qiluvchi omillarni o'rganadi. Harorat, konsentratsiya, katalizatorlar va sirt maydoni reaksiya tezligiga ta'sir qiladi. Kinetika sanoat jarayonlarini optimallashtirishda muhim."
+            },
+            {
+                title: "Kimyoviy muvozanat",
+                content: "Kimyoviy muvozanat qaytar reaksiyalarda to'g'ri va teskari reaksiyalar tezligi teng bo'lganda yuzaga keladi. Le Chatelier tamoyili muvozanatning siljishini tushuntiradi. Muvozanat sanoat jarayonlarida mahsuldorlikni oshirish uchun muhim."
+            },
+            {
+                title: "Kvant kimyosi",
+                content: "Kvant kimyosi atomlar va molekulalarning xatti-harakatlarini kvant mexanikasi asosida tushuntiradi. U elektronlar harakatini va kimyoviy bog'larni o'rganadi. Kvant kimyosi yangi materiallarni loyihalashda muhim."
+            },
+            {
+                title: "Yadro kimyosi",
+                content: "Yadro kimyosi atom yadrosidagi o'zgarishlarni o'rganadi. U radioaktivlik, yadro reaksiyalari va yadro energiyasini o'z ichiga oladi. Yadro kimyosi energetika, tibbiyot va arxeologiyada muhim."
+            },
+            {
+                title: "Atrof-muhit kimyosi",
+                content: "Atrof-muhit kimyosi tabiatdagi kimyoviy jarayonlarni va inson faoliyatining ta'sirini o'rganadi. U ifloslanish, iqlim o'zgarishi va ekotizimlarni o'z ichiga oladi. Atrof-muhit kimyosi barqaror rivojlanish uchun muhim."
+            },
+            {
+                title: "Sanoat kimyosi",
+                content: "Sanoat kimyosi kimyoviy moddalarni katta miqyosda ishlab chiqarishni o'rganadi. U o'g'itlar, plastiklar, dori-darmonlar va boshqa mahsulotlarni ishlab chiqarishni o'z ichiga oladi. Sanoat kimyosi iqtisodiyotda muhim rol o'ynaydi."
+            },
+            {
+                title: "Farmatsevtika kimyosi",
+                content: "Farmatsevtika kimyosi dori-darmonlarni loyihalash, sintez qilish va tahlil qilishni o'rganadi. U yangi dori vositalarini ishlab chiqish va mavjudlarini yaxshilashga qaratilgan. Farmatsevtika kimyosi sog'liqni saqlashda muhim."
+            },
+            {
+                title: "Oziq-ovqat kimyosi",
+                content: "Oziq-ovqat kimyosi oziq-ovqat tarkibi, xususiyatlari va saqlash jarayonlarini o'rganadi. U oziq moddalar, vitaminlar, minerallar va qo'shimchalarni o'z ichiga oladi. Oziq-ovqat kimyosi oziqlanish va xavfsizlik uchun muhim."
+            },
+            {
+                title: "Kosmetika kimyosi",
+                content: "Kosmetika kimyosi go'zallik va shaxsiy parvarish mahsulotlarini ishlab chiqishni o'rganadi. U teri, soch va tirnoqlar uchun mahsulotlarni o'z ichiga oladi. Kosmetika kimyosi xavfsizlik va samaradorlikni ta'minlashi kerak."
+            },
+            {
+                title: "Nanokimyo",
+                content: "Nanokimyo nanometr o'lchamdagi (1-100 nm) materiallarni o'rganadi. Nanomateriallar o'ziga xos xususiyatlarga ega bo'lib, ular elektronika, tibbiyot va energetikada qo'llaniladi. Nanokimyo yangi texnologiyalar uchun muhim."
+            },
+            {
+                title: "Kompyuter kimyosi",
+                content: "Kompyuter kimyosi kimyoviy muammolarni hal qilish uchun kompyuter simulyatsiyalaridan foydalanadi. U molekulalar tuzilishi, reaksiyalar va xususiyatlarni bashorat qiladi. Kompyuter kimyosi tadqiqot va ishlab chiqishni tezlashtiradi."
+            },
+            {
+                title: "Yashil kimyo",
+                content: "Yashil kimyo atrof-muhitga zarar etkazmaydigan kimyoviy jarayonlar va mahsulotlarni ishlab chiqishga qaratilgan. U chiqindilarni kamaytirish, xavfsiz moddalar va barqaror resurslardan foydalanishni o'z ichiga oladi."
+            },
+            {
+                title: "Astrokimyo",
+                content: "Astrokimyo kosmosdagi kimyoviy jarayonlarni o'rganadi. U yulduzlar, sayyoralar va galaktikalardagi moddalarni o'z ichiga oladi. Astrokimyo hayotning kelib chiqishi va koinotning evolyutsiyasini tushunishda muhim."
+            },
+            {
+                title: "Supramolekulyar kimyo",
+                content: "Supramolekulyar kimyo molekulalar o'rtasidagi o'zaro ta'sirlarni va ularning komplekslarini o'rganadi. U molekulalarning o'z-o'zini tashkil etishi va tanib olishini o'z ichiga oladi. Supramolekulyar kimyo yangi materiallar uchun muhim."
+            },
+            {
+                title: "Materialshunoslik kimyosi",
+                content: "Materialshunoslik kimyosi yangi materiallarni loyihalash va sintez qilishni o'rganadi. U metallar, keramika, polimerlar va kompozitlarni o'z ichiga oladi. Materialshunoslik kimyosi texnologiya rivojlanishi uchun muhim."
+            },
+            {
+                title: "Kristallografiya",
+                content: "Kristallografiya kristallarning tuzilishi va xususiyatlarini o'rganadi. U rentgen difraksiyasi va boshqa usullardan foydalanadi. Kristallografiya materialshunoslik, mineralogiya va biokimyoda muhim."
+            },
+            {
+                title: "Spektroskopiya",
+                content: "Spektroskopiya moddalarning elektromagnit nurlanish bilan o'zaro ta'sirini o'rganadi. U moddalarning tarkibi va tuzilishini aniqlash uchun ishlatiladi. Spektroskopiya tahlilning eng muhim usullaridan biri."
+            },
+            {
+                title: "Xromatografiya",
+                content: "Xromatografiya aralashmalarni ajratish va tahlil qilish usuli. U turli xil moddalarni ularning harakatchanligiga qarab ajratadi. Xromatografiya kimyo, biologiya va tibbiyotda keng qo'llaniladi."
+            },
+            {
+                title: "Mass-spektrometriya",
+                content: "Mass-spektrometriya molekulalarning massasini va tuzilishini aniqlash usuli. U ionlashtirilgan molekulalarni massalari bo'yicha ajratadi. Mass-spektrometriya yuqori sezgirlikka ega va ko'p sohalarda qo'llaniladi."
+            },
+            {
+                title: "Yadro magnit rezonansi",
+                content: "YMR (NMR) molekulalarning tuzilishini aniqlashning eng kuchli usuli. U magnit maydonida yadrolarning rezonansini o'lchaydi. YMR organik kimyo, biokimyo va tibbiyotda keng qo'llaniladi."
+            },
+            {
+                title: "Rentgen difraksiyasi",
+                content: "Rentgen difraksiyasi kristallarning atom tuzilishini aniqlash usuli. U rentgen nurlarining kristalldan o'tishini o'lchaydi. Bu usul DNK tuzilishini aniqlashda ham ishlatilgan."
+            },
+            {
+                title: "Molekulyar dinamika",
+                content: "Molekulyar dinamika molekulalarning harakatini kompyuter simulyatsiyasi orqali o'rganadi. U atomlar o'rtasidagi kuchlarni hisobga oladi. Molekulyar dinamika oqsillar va boshqa murakkab molekulalar uchun muhim."
+            },
+            {
+                title: "Kimyoviy sintez",
+                content: "Kimyoviy sintez yangi moddalarni hosil qilish jarayoni. U organik, noorganik va polimer sinteziga bo'linadi. Kimyoviy sintez yangi dori-darmonlar, materiallar va texnologiyalar uchun asos."
+            },
+            {
+                title: "Kataliz",
+                content: "Kataliz reaksiya tezligini oshirish uchun katalizatordan foydalanish. Katalizatorlar reaksiyada sarflanmaydi va qayta ishlatilishi mumkin. Kataliz sanoat jarayonlarida energiya va resurslarni tejaydi."
+            },
+            {
+                title: "Fotokimyo",
+                content: "Fotokimyo yorug'lik ta'sirida sodir bo'ladigan kimyoviy reaksiyalarni o'rganadi. U fotosintez, fotogrfiya va quyosh energiyasini o'z ichiga oladi. Fotokimyo yangi energiya texnologiyalari uchun muhim."
+            },
+            {
+                title: "Radiatsion kimyo",
+                content: "Radiatsion kimyo ionlashtiruvchi nurlanish ta'sirida sodir bo'ladigan kimyoviy o'zgarishlarni o'rganadi. U radiatsiya bilan moddalarning o'zaro ta'sirini o'z ichiga oladi. Radiatsion kimyo tibbiyot va energetikada muhim."
+            },
+            {
+                title: "Plazma kimyosi",
+                content: "Plazma kimyosi plazma holatidagi moddalarning kimyoviy xususiyatlarini o'rganadi. Plazma ionlashtirilgan gaz bo'lib, u yulduzlar va chaqmoqlarda mavjud. Plazma kimyosi materiallar ishlab chiqarishda qo'llaniladi."
+            },
+            {
+                title: "Kolloid kimyo",
+                content: "Kolloid kimyo dispers sistemalarni o'rganadi. U kolloid eritma, emulsiya va ko'piklarni o'z ichiga oladi. Kolloid kimyo oziq-ovqat, kosmetika va farmatsevtika sanoatida muhim."
+            },
+            {
+                title: "Elektrokimyoviy korroziya",
+                content: "Korroziya metallarning atrof-muhit bilan kimyoviy yoki elektrokimyoviy ta'siri natijasida buzilishi. Zanglash temirning eng keng tarqalgan korroziyasi. Korroziyadan himoya qilish iqtisodiyotda muhim."
+            },
+            {
+                title: "Galvanik elementlar",
+                content: "Galvanik elementlar kimyoviy energiyani elektr energiyasiga aylantiradi. Ular batareyalar va akkumulyatorlarning asosi. Galvanik elementlar ikki xil metalldan va elektrolitdan tashkil topgan."
+            },
+            {
+                title: "Elektroliz",
+                content: "Elektroliz elektr energiyasi yordamida kimyoviy reaksiyalarni amalga oshirish. U metallarni tozalash, qoplamalar qilish va moddalarni ajratish uchun ishlatiladi. Elektroliz sanoatda muhim jarayon."
+            },
+            {
+                title: "Yonish reaksiyalari",
+                content: "Yonish moddaning kislorod bilan tez reaksiyaga kirishib, issiqlik va yorug'lik chiqarishi. Yonish yoqilg'ilarning energiya manbai sifatida ishlatilishining asosi. Yonish ekzotermik reaksiya."
+            },
+            {
+                title: "Neytrallanish reaksiyasi",
+                content: "Neytrallanish kislota va asosning reaksiyaga kirishib, tuz va suv hosil qilishi. Bu reaksiya tibbiyot, qishloq xo'jaligi va sanoatda keng qo'llaniladi. Neytrallanish ekzotermik reaksiya."
+            },
+            {
+                title: "Cho'kma tushish reaksiyalari",
+                content: "Cho'kma tushish reaksiyalari eritmadagi ionlarning birikib, erimaydigan modda hosil qilishi. Bu reaksiyalar tahlil va tozalash uchun ishlatiladi. Cho'kma tushish reaksiyalari sifat tahlilida muhim."
+            },
+            {
+                title: "Oksidlanish-qaytarilish reaksiyalari",
+                content: "OQR reaksiyalari elektronlarning bir moddadan boshqasiga o'tishi bilan bog'liq. Ular yonish, korroziya va biologik jarayonlarda muhim. OQR reaksiyalari energetika va metallurgiyada qo'llaniladi."
+            },
+            {
+                title: "Polimerizatsiya",
+                content: "Polimerizatsiya kichik molekulalarning (monomerlarning) birikib, uzun zanjirli polimer hosil qilishi. Bu jarayon plastiklar, rezina va tolalarni ishlab chiqarishda muhim. Polimerizatsiya turli usullarda amalga oshiriladi."
+            },
+            {
+                title: "Sopolimerizatsiya",
+                content: "Sopolimerizatsiya ikki yoki undan ortiq turli monomerlarning birikib, sopolimer hosil qilishi. Bu usul turli xususiyatlarga ega yangi materiallarni olish uchun ishlatiladi. Sopolimerlar keng qo'llaniladi."
+            },
+            {
+                title: "Kondensatsiya reaksiyalari",
+                content: "Kondensatsiya reaksiyalari ikki molekula birikib, kichik molekula (odatda suv) ajralib chiqishi. Bu reaksiyalar polimerlar, oqsillar va nuklein kislotalarni hosil qilishda muhim."
+            },
+            {
+                title: "Qo'shilish reaksiyalari",
+                content: "Qo'shilish reaksiyalari ikki yoki undan ortiq modda birikib, bitta mahsulot hosil qilishi. Bu reaksiyalar organik kimyoda keng tarqalgan. Qo'shilish reaksiyalari yangi birikmalar olish uchun ishlatiladi."
+            },
+            {
+                title: "Ajralish reaksiyalari",
+                content: "Ajralish reaksiyalari bir modda ikki yoki undan ortiq oddiyroq moddaga parchalanishi. Bu reaksiyalar yuqori harorat, elektr toki yoki katalizatorlar ta'sirida sodir bo'ladi."
+            },
+            {
+                title: "Almashinish reaksiyalari",
+                content: "Almashinish reaksiyalari ikki modda o'zaro ionlar yoki atomlar almashinuvi. Bu reaksiyalar tuzlar, asoslar va kislotalar orasida keng tarqalgan. Almashinish reaksiyalari kimyo sanoatida muhim."
+            }
+        ];
+
+        // Quiz Questions (16 questions)
+        const quizQuestions = [
+            {
+                question: "Qaysi element Yer atmosferasida eng ko'p tarqalgan?",
+                options: ["Kislorod", "Azot", "Karbonat angidrid", "Argon"],
+                correct: 1,
+                points: 2.5
+            },
+            {
+                question: "Suvning kimyoviy formulasi qanday?",
+                options: ["H₂O₂", "H₂O", "HO", "H₃O"],
+                correct: 1,
+                points: 2.5
+            },
+            {
+                question: "Qaysi metall xona haroratida suyuq holatda bo'ladi?",
+                options: ["Temir", "Mis", "Simob", "Alyuminiy"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "pH shkalasida neytral muhit qaysi qiymatda?",
+                options: ["0", "7", "14", "1"],
+                correct: 1,
+                points: 2.5
+            },
+            {
+                question: "Qaysi element olmos va grafitning asosiy tarkibiy qismi?",
+                options: ["Kremniy", "Kislorod", "Uglerod", "Azot"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi gaz yonish uchun zarur?",
+                options: ["Azot", "Vodorod", "Kislorod", "Geliy"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi element eng yengil metall?",
+                options: ["Alyuminiy", "Litiy", "Magniy", "Natriy"],
+                correct: 1,
+                points: 2.5
+            },
+            {
+                question: "Qaysi kislota 'qirollik suvi' deb ataladi?",
+                options: ["Sulfat kislota", "Xlorid kislota", "Nitrat va xlorid kislota aralashmasi", "Sirka kislota"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi element fotosintez jarayonida ishlab chiqariladi?",
+                options: ["Karbonat angidrid", "Azot", "Kislorod", "Vodorod"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi modda eng qattiq tabiiy modda?",
+                options: ["Titan", "Volfram", "Olmos", "Korund"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi element radioaktiv va atom energetikasida ishlatiladi?",
+                options: ["Temir", "Uran", "Mis", "Qo'rg'oshin"],
+                correct: 1,
+                points: 2.5
+            },
+            {
+                question: "Qaysi gaz inert va havo sharlarini to'ldirishda ishlatiladi?",
+                options: ["Vodorod", "Kislorod", "Geliy", "Azot"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi element suv bilan juda kuchli reaksiyaga kirishadi?",
+                options: ["Oltin", "Kumush", "Natriy", "Mis"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi modda antiseptik sifatida ishlatiladi?",
+                options: ["Suv", "Yod", "Shakar", "Tuz"],
+                correct: 1,
+                points: 2.5
+            },
+            {
+                question: "Qaysi element barcha organik birikmalarning asosiy tarkibiy qismi?",
+                options: ["Kislorod", "Azot", "Uglerod", "Vodorod"],
+                correct: 2,
+                points: 2.5
+            },
+            {
+                question: "Qaysi jarayon moddaning suyuq holatdan gaz holatiga o'tishi?",
+                options: ["Muzlash", "Qaynash", "Kondensatsiya", "Sublimatsiya"],
+                correct: 1,
+                points: 2.5
+            }
+        ];
+
+        // Current state
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            generateMolecules();
+            generateFacts();
+            loadQuestion();
+            
+            // Language selector
+            document.getElementById('langSelector').addEventListener('change', function(e) {
+                changeLanguage(e.target.value);
+            });
+        });
+
+        // Generate 3D Molecules
+        function generateMolecules() {
+            const container = document.getElementById('moleculesGrid');
+            molecules.forEach(molecule => {
+                const card = document.createElement('div');
+                card.className = 'molecule-card';
+                
+                const molDiv = document.createElement('div');
+                molDiv.className = 'molecule-3d';
+                
+                molecule.atoms.forEach(atom => {
+                    const atomDiv = document.createElement('div');
+                    atomDiv.className = 'atom';
+                    atomDiv.style.width = atom.r * 2 + 'px';
+                    atomDiv.style.height = atom.r * 2 + 'px';
+                    atomDiv.style.background = atom.color;
+                    atomDiv.style.left = (atom.x - atom.r) + 'px';
+                    atomDiv.style.top = (atom.y - atom.r) + 'px';
+                    atomDiv.style.animationDelay = Math.random() * 2 + 's';
+                    molDiv.appendChild(atomDiv);
+                });
+                
+                const nameDiv = document.createElement('h3');
+                nameDiv.textContent = molecule.name;
+                nameDiv.style.textAlign = 'center';
+                nameDiv.style.marginTop = '1rem';
+                
+                card.appendChild(molDiv);
+                card.appendChild(nameDiv);
+                container.appendChild(card);
+            });
+        }
+
+        // Generate Facts
+        function generateFacts() {
+            const container = document.getElementById('factsGrid');
+            facts.forEach(fact => {
+                const card = document.createElement('div');
+                card.className = 'fact-card';
+                
+                const title = document.createElement('h3');
+                title.textContent = fact.title;
+                
+                const content = document.createElement('p');
+                content.textContent = fact.content;
+                
+                card.appendChild(title);
+                card.appendChild(content);
+                container.appendChild(card);
+            });
+        }
+
+        // Load Quiz Question
+        function loadQuestion() {
+            if (currentQuestion >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+            
+            const q = quizQuestions[currentQuestion];
+            const content = document.getElementById('quizContent');
+            answered = false;
+            
+            document.getElementById('questionNumber').textContent = currentQuestion + 1;
+            document.getElementById('currentScore').textContent = score.toFixed(1);
+            
+            content.innerHTML = `
+                <div class="question">
+                    <h3>${q.question}</h3>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <div class="option" onclick="checkAnswer(${idx})">${opt}</div>
+                        `).join('')}
+                    </div>
+                </div>
+                <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()" disabled>Keyingi savol →</button>
+            `;
+        }
+
+        // Check Answer
+        function checkAnswer(idx) {
+            if (answered) return;
+            answered = true;
+            
+            const q = quizQuestions[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            options[q.correct].classList.add('correct');
+            
+            if (idx === q.correct) {
+                score += q.points;
+                document.getElementById('currentScore').textContent = score.toFixed(1);
+            } else {
+                options[idx].classList.add('incorrect');
+            }
+            
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        // Next Question
+        function nextQuestion() {
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        // Show Results
+        function showResults() {
+            const content = document.getElementById('quizContent');
+            const percentage = (score / 40) * 100;
+            let message = '';
+            
+            if (percentage >= 90) message = "A'lo! Siz kimyoni juda yaxshi bilasiz! 🏆";
+            else if (percentage >= 70) message = "Yaxshi! Bilimingiz mustahkam! 👍";
+            else if (percentage >= 50) message = "O'rtacha. Yana o'rganish kerak! 📚";
+            else message = "Kimyoni chuqurroq o'rganing! 💪";
+            
+            content.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem;">Test yakunlandi!</h2>
+                    <div style="font-size: 3rem; font-weight: bold; color: var(--primary); margin: 2rem 0;">
+                        ${score.toFixed(1)} / 40
+                    </div>
+                    <p style="font-size: 1.3rem; margin-bottom: 2rem;">${message}</p>
+                    <button class="quiz-btn" onclick="restartQuiz()">Qaytadan boshlash</button>
+                </div>
+            `;
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            loadQuestion();
+        }
+
+        // Change Language
+        function changeLanguage(lang) {
+            const trans = translations[lang];
+            if (!trans) return;
+            
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (trans[key]) {
+                    el.textContent = trans[key];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
